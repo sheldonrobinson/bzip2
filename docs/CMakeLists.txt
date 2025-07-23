@@ -12,10 +12,11 @@ foreach(t IN LISTS DOC_TYPES)
         COMMAND
             ${PROG_SH} xmlproc.sh -${t} manual.${t}
     )
-
-    install(
-        FILES
-            ${CMAKE_CURRENT_BINARY_DIR}/manual.${t}
-        DESTINATION
-            ${CMAKE_INSTALL_PREFIX}/docs)
+	if(ENABLE_INSTALL)
+		install(
+			FILES
+				${CMAKE_CURRENT_BINARY_DIR}/manual.${t}
+			DESTINATION
+				${CMAKE_INSTALL_PREFIX}/docs)
+	endif()
 endforeach()

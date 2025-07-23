@@ -248,8 +248,10 @@ if(ENABLE_SHARED_LIB)
     set_target_properties(bz2 PROPERTIES
         COMPILE_FLAGS "${WARNCFLAGS}"
         VERSION ${LT_VERSION} SOVERSION ${LT_SOVERSION})
-    install(TARGETS bz2 DESTINATION ${CMAKE_INSTALL_LIBDIR})
-    install(FILES bzlib.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+	if(ENABLE_INSTALL)
+		install(TARGETS bz2 DESTINATION ${CMAKE_INSTALL_LIBDIR})
+		install(FILES bzlib.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+	endif()
 
     if(USE_OLD_SONAME)
         # Hack to support the old libbz2.so.1.0 version by including an extra copy.
@@ -268,7 +270,9 @@ if(ENABLE_SHARED_LIB)
                 VERSION ${LT_SOVERSION}.${LT_AGE} SOVERSION ${LT_SOVERSION}.${LT_AGE}
                 OUTPUT_NAME bz2
             )
-            install(TARGETS bz2_old_soname DESTINATION ${CMAKE_INSTALL_LIBDIR})
+			if(ENABLE_INSTALL)
+				install(TARGETS bz2_old_soname DESTINATION ${CMAKE_INSTALL_LIBDIR})
+			endif()
         endif()
     endif()
 endif()
@@ -286,8 +290,10 @@ if(ENABLE_STATIC_LIB)
         SOVERSION           ${LT_SOVERSION}
         ARCHIVE_OUTPUT_NAME bz2_static)
     target_compile_definitions(bz2_static PUBLIC BZ2_STATICLIB)
-    install(TARGETS bz2_static DESTINATION ${CMAKE_INSTALL_LIBDIR})
-    install(FILES bzlib.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+	if(ENABLE_INSTALL)
+		install(TARGETS bz2_static DESTINATION ${CMAKE_INSTALL_LIBDIR})
+		install(FILES bzlib.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+	endif()
 endif()
 
 if(ENABLE_APP)
@@ -302,12 +308,14 @@ if(ENABLE_APP)
     else()
         target_compile_definitions(bzip2 PUBLIC BZ_LCCWIN32=0 BZ_UNIX)
     endif()
-    install(TARGETS bzip2 DESTINATION ${CMAKE_INSTALL_BINDIR})
+	if(ENABLE_INSTALL)
+		install(TARGETS bzip2 DESTINATION ${CMAKE_INSTALL_BINDIR})
 
-    # Create bzip2 copies bzcat and bunzip.
-    # The default behavior is altered in bzip2.c code by checking the program name.
-    install_target_symlink(bzip2 bzcat)
-    install_target_symlink(bzip2 bunzip)
+		# Create bzip2 copies bzcat and bunzip.
+		# The default behavior is altered in bzip2.c code by checking the program name.
+		install_target_symlink(bzip2 bzcat)
+		install_target_symlink(bzip2 bunzip)
+	endif()
 
     # The bzip2recover executable.
     add_executable(bzip2recover)
@@ -320,7 +328,9 @@ if(ENABLE_APP)
     else()
         target_compile_definitions(bzip2recover PUBLIC BZ_LCCWIN32=0 BZ_UNIX)
     endif()
-    install(TARGETS bzip2recover DESTINATION ${CMAKE_INSTALL_BINDIR})
+	if(ENABLE_INSTALL)
+		install(TARGETS bzip2recover DESTINATION ${CMAKE_INSTALL_BINDIR})
+	endif()
 
     if(ENABLE_EXAMPLES)
         if(ENABLE_SHARED_LIB)
@@ -329,21 +339,25 @@ if(ENABLE_APP)
             target_sources(dlltest
                 PRIVATE   dlltest.c)
             target_link_libraries(dlltest bz2)
-            install(TARGETS dlltest DESTINATION ${CMAKE_INSTALL_BINDIR})
+			if(ENABLE_INSTALL)
+				install(TARGETS dlltest DESTINATION ${CMAKE_INSTALL_BINDIR})
+			endif()
         endif()
     endif()
 
     if(NOT WIN32)
         # Install shell scripts, and renamed copies.
-        install(PROGRAMS bzdiff bzgrep bzmore
-            DESTINATION ${CMAKE_INSTALL_BINDIR})
+		if(ENABLE_INSTALL)
+			install(PROGRAMS bzdiff bzgrep bzmore
+				DESTINATION ${CMAKE_INSTALL_BINDIR})
 
-        install_script_symlink(bzdiff bzcmp)
+			install_script_symlink(bzdiff bzcmp)
 
-        install_script_symlink(bzgrep bzegrep)
-        install_script_symlink(bzgrep bzfgrep)
+			install_script_symlink(bzgrep bzegrep)
+			install_script_symlink(bzgrep bzfgrep)
 
-        install_script_symlink(bzmore bzless)
+			install_script_symlink(bzmore bzless)
+		endif()
     endif()
 
 endif()
