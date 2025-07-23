@@ -200,8 +200,10 @@ configure_file(
     bzip2.pc.in
     ${CMAKE_CURRENT_BINARY_DIR}/bzip2.pc
     @ONLY)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/bzip2.pc
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
+if(ENABLE_INSTALL)
+	install(FILES ${CMAKE_CURRENT_BINARY_DIR}/bzip2.pc
+		DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
+endif()
 
 #
 # The build targets.
