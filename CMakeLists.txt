@@ -13,6 +13,8 @@ set(LT_CURRENT  1)
 set(LT_REVISION 9)
 set(LT_AGE      0)
 
+include(CMakeDependentOption)
+
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 include(Version)
 include(SymLink)
@@ -33,6 +35,14 @@ set(ENABLE_APP_DEFAULT ON)
 set(ENABLE_EXAMPLES_DEFAULT OFF)
 set(ENABLE_DOCS_DEFAULT OFF)
 include(CMakeOptions.txt)
+
+cmake_dependent_option(ENABLE_LIB_ONLY   "Build libbz2 only.  This is a short hand for -DENABLE_APP=0 -DENABLE_EXAMPLES=0" ON BZIP2_ENABLE_LIB_ONLY OFF)
+
+cmake_dependent_option(ENABLE_STATIC_LIB "Build libbz2 in static mode also" ON BZIP2_ENABLE_STATIC_LIB OFF)
+
+cmake_dependent_option(ENABLE_SHARED_LIB "Build libbz2 as a shared library" ON BZIP2_ENABLE_SHARED_LIB OFF)
+
+cmake_dependent_option(ENABLE_INSTALL "Install applications and library" ON BZIP2_ENABLE_INSTALL OFF)
 
 if(ENABLE_LIB_ONLY AND (ENABLE_APP OR ENABLE_EXAMPLES))
     # Remember when disabled options are disabled for later diagnostics.
