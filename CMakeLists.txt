@@ -374,10 +374,12 @@ if(ENABLE_APP)
 
 endif()
 
-if(Python3_FOUND)
-    enable_testing()
-    add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
-    add_subdirectory(tests)
+if(BZIP2_ENABLE_TESTS)
+	if(Python3_FOUND)
+		enable_testing()
+		add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
+		add_subdirectory(tests)
+	endif()
 endif()
 
 add_subdirectory(man)
